@@ -158,9 +158,9 @@ const mint = () => {
 	const mintBookbear = async () => {
 
     try {
-      const {ethereum} = window
+      // const {ethereum} = window
 
-      if (ethereum) {
+      // if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum)
         const signer = provider.getSigner()
         const nftContract = new ethers.Contract(
@@ -170,7 +170,7 @@ const mint = () => {
         )
 
           let overrides = {
-            value: ethers.utils.parseEther('0.15'),
+            value: ethers.utils.parseEther('0.001'),
           }
 
           let nftTx = await nftContract.mint(currentAccount, 1, overrides)
@@ -188,9 +188,9 @@ const mint = () => {
           console.log(
             `Mined, see transaction: https://etherscan.io/tx/${nftTx.hash}`
           )
-      } else {
-        console.log("Ethereum object doesn't exist!")
-      }
+      // } else {
+      //   console.log("Ethereum object doesn't exist!")
+      // }
 
     } catch(error) {
       console.log("Catch: ", error)
