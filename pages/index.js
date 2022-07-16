@@ -114,14 +114,19 @@ const mint = () => {
     //   infuraId: "b62bbe93b8c34ca18a20ac815dcc7552",
     // });
     
-    await provider.enable();
-		const web3Provider = new ethers.providers.Web3Provider(provider);
-		const signer = provider.getSigner();
-	} catch(error) {console.log(error)}
-
+    // provider.enable();
+		console.log("Provider: ", provider);
 		const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
 		console.log('Found account', accounts[0])
 			setCurrentAccount(accounts[0])
+			console.log(currentAccount);
+		const signer = provider.getSigner();
+	} catch(error) {console.log(error)}
+
+		// const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+		// console.log('Found account', accounts[0])
+		// 	setCurrentAccount(accounts[0])
+		// 	console.log(currentAccount);
 	}
 
 
@@ -137,7 +142,13 @@ const mint = () => {
 		const rinkebyChainId = 1
 
 		const devChainId = 1
-		const localhostChainId = `0x${Number(devChainId).toString(16)}`
+		const localhostChainId = 1
+
+		console.log(chainId !== rinkebyChainId);
+		console.log(chainId !== localhostChainId);
+		console.log(chainId);
+		console.log(rinkebyChainId);
+		console.log(localhostChainId);
 
 		if (chainId !== rinkebyChainId && chainId !== localhostChainId) {
 			setCorrectNetwork(false)
@@ -170,7 +181,7 @@ const mint = () => {
         )
 
           let overrides = {
-            value: ethers.utils.parseEther('0.001'),
+            value: ethers.utils.parseEther('0.15'),
           }
 
           let nftTx = await nftContract.mint(currentAccount, 1, overrides)
