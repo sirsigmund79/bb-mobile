@@ -5,6 +5,8 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3Modal from "web3modal"
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import NFT from '../utils/NFT.json';
+import Web3 from "web3";
+// import Web3Modal from "web3modal";
 
 
 const providerOptions = {
@@ -33,9 +35,22 @@ const providerOptions = {
   }
     };
 
+		const connectWallet = async () => {
+			const web3Modal = new Web3Modal({
+				network: "mainnet", // optional
+				cacheProvider: true, // optional
+				providerOptions // required
+			});
+			console.log("web3modal");
+			
+			const provider = await web3Modal.connect();
+			
+			const web3 = new Web3(provider);
+		}
 
-    
 
+
+		
 
 const mint = () => {
 	// const [mintedNFT, setMintedNFT] = useState(null)
@@ -116,10 +131,11 @@ const mint = () => {
     
     // provider.enable();
 		console.log("Provider: ", provider);
-		const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
-		console.log('Found account', accounts[0])
-			setCurrentAccount(accounts[0])
-			console.log(currentAccount);
+		// const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+		const accounts = await provider.listAccounts();
+		console.log('Found account', accounts[0]);
+		setCurrentAccount(accounts[0]);
+		console.log("Current Account: ", currentAccount);
 		const signer = provider.getSigner();
 	} catch(error) {console.log(error)}
 
@@ -134,27 +150,28 @@ const mint = () => {
 	const checkCorrectNetwork = async () => {
 		// const { ethereum } = window
 		// let chainId = await ethereum.request({ method: 'eth_chainId' })
-    let network = await ethers.getDefaultProvider().getNetwork();
-    let chainId = network.chainId;
-		console.log('Connected to chain:' + chainId)
+    // let network = await ethers.getDefaultProvider().getNetwork();
+    // let chainId = network.chainId;
+		// console.log('Connected to chain:' + chainId)
 
 
-		const rinkebyChainId = 1
+		// const rinkebyChainId = 1
 
-		const devChainId = 1
-		const localhostChainId = 1
+		// const devChainId = 1
+		// const localhostChainId = 1
 
-		console.log(chainId !== rinkebyChainId);
-		console.log(chainId !== localhostChainId);
-		console.log(chainId);
-		console.log(rinkebyChainId);
-		console.log(localhostChainId);
+		// console.log(chainId !== rinkebyChainId);
+		// console.log(chainId !== localhostChainId);
+		// console.log(chainId);
+		// console.log(rinkebyChainId);
+		// console.log(localhostChainId);
 
-		if (chainId !== rinkebyChainId && chainId !== localhostChainId) {
-			setCorrectNetwork(false)
-		} else {
-			setCorrectNetwork(true)
-		}
+		// if (chainId !== rinkebyChainId && chainId !== localhostChainId) {
+		// 	setCorrectNetwork(false)
+		// } else {
+		// 	setCorrectNetwork(true)
+		// }
+		setCorrectNetwork(true);
 	}
 
 	useEffect(() => {
@@ -170,15 +187,27 @@ const mint = () => {
 
     try {
       // const {ethereum} = window
+			const web3Modal = new Web3Modal({
+				network: "mainnet", // optional
+				cacheProvider: true, // optional
+				providerOptions // required
+			});
+			const instance = await web3Modal.connect();
+			const provider = new ethers.providers.Web3Provider(instance);
+			const signer = provider.getSigner();
+			const nftContract = new ethers.Contract(
+				nftContractAddress,
+				NFT.abi,
+				signer
+			)
 
       // if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum)
-        const signer = provider.getSigner()
-        const nftContract = new ethers.Contract(
-          nftContractAddress,
-          NFT.abi,
-          signer
-        )
+        // const provider = new ethers.providers.Web3Provider(ethereum)
+				
+				// const instance = await web3Modal.connect();
+    		// const provider = new ethers.providers.Web3Provider(instance);
+        // const signer = provider.getSigner()
+
 
           let overrides = {
             value: ethers.utils.parseEther('0.15'),
@@ -204,8 +233,13 @@ const mint = () => {
       // }
 
     } catch(error) {
-      console.log("Catch: ", error)
-      setTxError(error.message)
+      console.log("Catch: ", error.code)
+			if(error.code === "INSUFFICIENT_FUNDS") {
+				setTxError("Your wallet has insufficient funds to complete the transaction. Please add more ETH")
+			} else {
+				setTxError(error.message)
+			}
+      
     }
   }
 
@@ -269,6 +303,7 @@ const mint = () => {
               </div>
             )
             ) : (
+							
               <div>{txError}</div>
             )
         }
