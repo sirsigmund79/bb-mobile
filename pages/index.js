@@ -21,14 +21,14 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      infuraId: "b62bbe93b8c34ca18a20ac815dcc7552" // required
+      infuraId: "" // required
     }
   },
   coinbasewallet: {
     package: CoinbaseWalletSDK, // Required
     options: {
       appName: "Bookbears", // Required
-      infuraId: "b62bbe93b8c34ca18a20ac815dcc7552", // Required
+      infuraId: "", // Required
       chainId: 1, // Optional. It defaults to 1 if not provided
       darkMode: false // Optional. Use dark theme, defaults to false
     }
@@ -97,14 +97,14 @@ const mint = () => {
 		// 	walletconnect: {
 		// 		package: WalletConnectProvider, // required
 		// 		options: {
-		// 			infuraId: "b62bbe93b8c34ca18a20ac815dcc7552" // required
+		// 			infuraId: "" // required
 		// 		}
 		// 	},
 		// 	coinbasewallet: {
 		// 		package: CoinbaseWalletSDK, // Required
 		// 		options: {
 		// 			appName: "Bookbears", // Required
-		// 			infuraId: "b62bbe93b8c34ca18a20ac815dcc7552", // Required
+		// 			infuraId: "", // Required
 		// 			chainId: 1, // Optional. It defaults to 1 if not provided
 		// 			darkMode: false // Optional. Use dark theme, defaults to false
 		// 		}
@@ -126,7 +126,7 @@ const mint = () => {
     const provider = new ethers.providers.Web3Provider(instance);
 
     // const provider = new WalletConnectProvider({
-    //   infuraId: "b62bbe93b8c34ca18a20ac815dcc7552",
+    //   infuraId: "",
     // });
     
     // provider.enable();
